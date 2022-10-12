@@ -3,8 +3,6 @@
 #include<cstring>
 #include <exception>
 
-//BIG 4
-
 template<typename T>
 class MyStack{
     public:
@@ -21,11 +19,12 @@ class MyStack{
 
         bool isEmpty()const;
         size_t lenght()const;
+        size_t size()const; //clone of lenght
 
     private:
-    
-        static size_t const DEFAULT_STACK_SIZE = 1;
-        T* m_Array = nullptr;
+
+        static size_t const DEFAULT_STACK_SIZE = 16;
+        T* m_Data = nullptr;
         size_t m_Size = 0;
         size_t m_MaxArrSize = 1;
 
@@ -38,7 +37,7 @@ template<typename T>
 MyStack<T>::MyStack(){
     m_Size = 0;
     size_t m_MaxArrSize = DEFAULT_STACK_SIZE;
-    m_Array = new T [m_MaxArrSize];
+    m_Data = new T [m_MaxArrSize];
 }
 template<typename T>
 MyStack<T>::~MyStack(){
@@ -54,6 +53,10 @@ template<typename T>
 size_t MyStack<T>::lenght()const{
     return m_Size;
 }
+template<typename T>
+size_t MyStack<T>::size()const{
+    return m_Size;
+}
 
 template<typename T>
 void MyStack<T>::push(T const & newObj){
@@ -61,7 +64,7 @@ void MyStack<T>::push(T const & newObj){
         resize();
     }
 
-    m_Array[m_Size] = newObj;
+    m_Data[m_Size] = newObj;
     m_Size++;
     return;
 
@@ -72,7 +75,7 @@ void MyStack<T>::push(T&& newObj){
         resize();
     }
 
-    m_Array[m_Size] = newObj;
+    m_Data[m_Size] = newObj;
     m_Size++;
     return;
 }
@@ -83,10 +86,10 @@ void MyStack<T>::resize(){
     T* temp = new T[m_MaxArrSize];
 
     for(size_t i=0; i<m_Size; i++){
-        temp[i] = m_Array[i];
+        temp[i] = m_Data[i];
     }
-    delete []m_Array;
-    m_Array = temp;
+    delete []m_Data;
+    m_Data = temp;
     temp = nullptr;
     return;
 }
@@ -96,7 +99,7 @@ T const & MyStack<T>::peek()const{
     if( isEmpty() ){
         throw std::logic_error("Empty stack!");
     }
-    return m_Array[m_Size-1];
+    return m_Data[m_Size-1];
 } 
 
 template<typename T>
@@ -105,12 +108,12 @@ T const & MyStack<T>::pop(){
         throw std::logic_error("Empty stack!");
     }
     m_Size--;
-    return m_Array[m_Size-1];  
+    return m_Data[m_Size-1];  
 } 
 
 template<typename T>
 void MyStack<T>::free(){
-    delete []m_Array;
+    delete []m_Data;
     return;
 } 
 
@@ -124,9 +127,9 @@ void MyStack<T>::copyFrom(MyStack const & other){
     m_Size = other.m_Size;
     m_MaxArrSize = other.m_MaxArrSize;
     
-    m_Array = new T [m_MaxArrSize];
+    m_Data = new T [m_MaxArrSize];
     for(size_t i = 0 ; i < m_Size; i++ ){
-        m_Array[i] = other.m_Array[i];
+        m_Data[i] = other.m_Data[i];
     }
     return;
 }
