@@ -16,6 +16,7 @@ class MyStack{
         void push(T&& object);
         T const & pop();
         T const & peek()const;
+        T const & top()const; //clone of peek
 
         bool isEmpty()const;
         size_t lenght()const;
@@ -96,6 +97,14 @@ void MyStack<T>::resize(){
 
 template<typename T>
 T const & MyStack<T>::peek()const{
+    if( isEmpty() ){
+        throw std::logic_error("Empty stack!");
+    }
+    return m_Data[m_Size-1];
+} 
+
+template<typename T>
+T const & MyStack<T>::top()const{
     if( isEmpty() ){
         throw std::logic_error("Empty stack!");
     }
