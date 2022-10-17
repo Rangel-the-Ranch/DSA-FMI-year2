@@ -1,6 +1,7 @@
 #include<iostream>
 
-#include"MyStack.hpp"
+#include"Stacks/MyStack.hpp"
+#include"Stacks/MyStaticStack.hpp"
 
 int main(){
     

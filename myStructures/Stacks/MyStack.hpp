@@ -1,6 +1,6 @@
 #pragma once
 
-#include<cstring>
+//#include<cstring>
 #include <exception>
 
 template<typename T>
@@ -99,25 +99,28 @@ template<typename T>
 T const & MyStack<T>::peek()const{
     if( isEmpty() ){
         throw std::logic_error("Empty stack!");
+    }else{
+        return m_Data[m_Size-1];
     }
-    return m_Data[m_Size-1];
 } 
 
 template<typename T>
 T const & MyStack<T>::top()const{
     if( isEmpty() ){
         throw std::logic_error("Empty stack!");
+    }else{
+        return m_Data[m_Size-1];
     }
-    return m_Data[m_Size-1];
 } 
 
 template<typename T>
 T const & MyStack<T>::pop(){
     if( isEmpty() ){
         throw std::logic_error("Empty stack!");
+    }else{
+        m_Size--;
+        return m_Data[m_Size-1];  
     }
-    m_Size--;
-    return m_Data[m_Size-1];  
 } 
 
 template<typename T>
