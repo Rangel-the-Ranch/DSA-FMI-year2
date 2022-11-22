@@ -12,7 +12,9 @@ void printQueue(std::queue<T>& q){
 
 template <typename T>
 std::queue<T>* taskOne(const size_t n){
-    //for(size_t )
+    for(size_t i=0; i<n;i++){
+        
+    }
     
 }
 
