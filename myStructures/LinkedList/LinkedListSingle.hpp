@@ -1,178 +1,162 @@
 #pragma once
 
-
-
-
-
 template <typename T>
-class linkedListDouble{
+class linkedListSingle{
     private:
-        struct listElem{
-            listElem* previous = nullptr;
-            listElem* next = nullptr;
-            T data;    
-            listElem(const T& newData){
+        struct listNode{
+            listNode* next = nullptr;
+            T data;
+
+            listNode(const T& newData){ 
                 data = newData;
-            }
+                next = nullptr;
+            }    
+            listNode(const listNode& newNode){
+                data = newNode.date;
+                next = nullptr;
+            }        
         };
 
-        void free();    
+        listNode* m_begin = nullptr;
+        listNode* m_end = nullptr;
+        size_t m_size = 0;
+        
+        void free();        
 
     public:
-    
-        linkedListDouble();
-        void pushBack(const listElem& newListElem);
-        void pushFront(const listElem& newListElem);
+        void pushBack(const T& newData);
+        void pushFront(const T& newData);
         void popBack();
         void popFront();
-        const T& peekFront()const;
         const T& peekBack()const;
+        const T& peekFront()const;
         bool empty()const;
         size_t getSize()const;
 
         void printList()const;
 
         class Iterator{
+            public:
+                Iterator* operator++(){
+                    if(ptr->next != nullptr){
+                        ptr = ptr->next;
+                    }
+                }
+                T& operator*()const{
+                    if(ptr != nullptr){
+                        return ptr->data;
+                    }
+                    throw "Unused iterator";
+                }
+                bool operator==(const Iterator& other)const{
+                    return ptr == other.ptr;
+                }
+                
+                Iterator(listNode* arg){
+                    ptr = arg;
+                }
+
+                friend class linkedSingleList;
             private:
-                listElem* position;
-
-                Iterator(listElem* newElm) : position { newElm } {}
-            public: 
-                Iterator& operator++(){
-                    if(position->next){
-                        position = position->next;
-                    }
-                    return *this;
-                    }
-                Iterator& operator--(){
-                    if(position->previous){
-                        position = position->previous;
-                    }
-                    return *this;
-                }
-                T& operator*(){
-                    return position->data;
-                }
-                bool operator==(const Iterator& other) const {
-                    return other.position == position;
-                }
-
-                bool operator!=(const Iterator& other) const {
-                    return !(*this == other);
-                }
-            friend class linkedListDouble;
+                listNode* ptr = nullptr;
+                
         };
 
-    private: 
-        
-        listElem* m_start = nullptr;
-        listElem* m_end = nullptr;
-        size_t m_size = 0;
+        Iterator begin(){
+            return Iterator(m_begin);
+        };
 };
-template<typename T>
-void linkedListDouble<T>::free(){
-    while(m_end){
-        popFront();
-    }
-    m_size = 0;  
+template <typename T>
+bool linkedListSingle<T>::empty()const{
+    return !m_end;
+}
+template <typename T>
+size_t linkedListSingle<T>::getSize()const{
+    return m_size;
 }
 
-template<typename T>
-linkedListDouble<T>::linkedListDouble(){
-    m_start = nullptr;
-    m_end = nullptr;
-    m_size = 0;
-}
 
-template<typename T>
-void linkedListDouble<T>::pushBack(const listElem& newListElem){
-    listElem* toPush = new listElem(newListElem);
 
-    if( m_start == nullptr){
-        m_start = toPush;
-        m_end = toPush;
+template <typename T>
+void linkedListSingle<T>::pushBack(const T& newData){
+    listNode*  newElem = new listNode(newData);
+    if(m_end == nullptr){
+        m_end = newElem;
+        m_begin = newElem;
     }else{
-        m_end->next = toPush;
-        toPush->previous = m_end;
-        toPush->next = nullptr;
-        m_end = toPush;
+        
+        m_end->next = newElem;
+        m_end = m_end-> next;
     }
     m_size++;
 }
-template<typename T>
-void linkedListDouble<T>::pushFront(const listElem& newListElem){
-    listElem* toPush = new listElem(newListElem);
-
-    if( m_end == nullptr){
-        m_start = toPush;
-        m_end = toPush;
+template <typename T>
+void linkedListSingle<T>::pushFront(const T& newData){
+    listNode*  newElem = new listNode(newData);
+    if(m_begin == nullptr){
+        m_end = newElem;
+        m_begin = newElem;
     }else{
-        m_start->previous = toPush;
-        toPush->previous = nullptr;
-        toPush->next = m_start;
-        m_start = toPush;
+        newElem->next = m_begin;
+        m_begin = newElem;
     }
     m_size++;
 }
-
-
-template<typename T>
-void linkedListDouble<T>::popBack(){
+template <typename T>
+void linkedListSingle<T>::popBack(){
     if(m_end == nullptr){
-        throw "Empty queue";
-    }else if(m_start == m_end){
-        delete m_start;
-        m_start = nullptr;
+        throw "Empty list";
+    }else if(m_begin == m_end){
+        delete m_begin;
+        m_begin = nullptr;
         m_end = nullptr;
+        m_size--;
     }else{
-        m_end = m_end->previous;
-        delete m_end->next;
-        m_end->next = nullptr;
+        listNode* iter = m_begin;
+        while (iter->next->next != nullptr){
+            iter = iter->next;
+        }
+        delete iter->next;
+        iter->next = nullptr;
+        m_size--;
+        iter = nullptr;
     }
-    m_size--;
+    
 }
-template<typename T>
-void linkedListDouble<T>::popFront(){
-    if(m_start == nullptr){
-        throw "Empty queue";
-    }else if(m_start == m_end){
-        delete m_start;
-        m_start = nullptr;
+template <typename T>
+void linkedListSingle<T>::popFront(){
+    if(m_begin == nullptr){
+        throw "Empty list";
+    }else if(m_begin == m_end){
+        delete m_begin;
+        m_begin = nullptr;
         m_end = nullptr;
+        m_size--;
     }else{
-        m_start = m_start->next;
-        delete m_start->previous;
-        m_start->previous = nullptr;
-    }
-    m_size--;
+        listNode* temp = m_begin;
+        m_begin = m_begin->next;
+        delete temp;
+        m_size--;
+    }  
 }
-
-template<typename T>
-const T& linkedListDouble<T>::peekBack()const{
+template <typename T>
+const T& linkedListSingle<T>::peekBack()const{
     if(m_end == nullptr){
-         throw "Empty queue";
+        throw "Empty list";
     }
     return m_end->data;
 }
-template<typename T>
-const T& linkedListDouble<T>::peekFront()const{
-    if(m_start == nullptr){
-         throw "Empty queue";
+template <typename T>
+const T& linkedListSingle<T>::peekFront()const{
+    if(m_begin == nullptr){
+        throw "Empty list";
     }
-    return m_start->data;
+    return m_begin->data;
 }
-template<typename T>
-bool linkedListDouble<T>::empty()const{
-    return !m_start;
-}
-template<typename T>
-size_t linkedListDouble<T>::getSize()const{
-    return m_size;
-}
-template<typename T>
-void linkedListDouble<T>::printList()const{
-    listElem* iter = m_start;
-    if(m_start == nullptr){
+template <typename T>
+void linkedListSingle<T>::printList()const{
+    listNode* iter = m_begin;
+    if(m_begin == nullptr){
         return;
     }
     while (iter->next){
@@ -182,4 +166,11 @@ void linkedListDouble<T>::printList()const{
     }
     std::cout<<iter->data;
     std::cout<<std::endl;
+}
+template <typename T>
+void linkedListSingle<T>::free(){
+    while( !empty() ){
+        popFront();
+    }
+    m_size = 0;
 }
