@@ -20,6 +20,7 @@ class linkedListDouble{
         const T& peekBack()const;
         bool empty()const;
         size_t getSize()const;
+        void reverce();
 
         void printList()const;
 
@@ -36,6 +37,27 @@ class linkedListDouble{
         void move(linkedListDouble&& other);
         
 };
+
+template<typename T>
+void linkedListDouble<T>::reverce(){
+    if( !m_start || m_start == m_end){
+        return;
+    }
+    listElem* newBeg = nullptr;
+    listElem* prev = nullptr;
+
+    for( listElem* it = m_start; it; it=it->previous){
+        listElem* temp = it->previous;
+        it->previous = it->next;
+        it = temp;
+
+    }
+    //listElem* temp = m_start;
+    //m_start = m_end;
+    //m_end = temp;
+
+}
+
 template<typename T>
 linkedListDouble<T>::linkedListDouble(const linkedListDouble<T>& other){
     copy(other);

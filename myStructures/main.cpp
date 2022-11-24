@@ -2,12 +2,12 @@
 
 //#include"Stacks/MyStack.hpp"
 //#include"Stacks/MyStaticStack.hpp"
-//#include"LinkedList/LinkedListSingle.hpp"
+#include"LinkedList/LinkedListSingle.hpp"
 #include"LinkedList/LinkedListDouble.hpp"
 
 
 int main(){
-    linkedListDouble<int> A;
+    linkedListSingle<int> A;
     A.pushBack(1);
     A.pushBack(2);
     A.pushBack(3);
@@ -16,11 +16,12 @@ int main(){
     A.popFront();
     A.pushFront(-1);
     A.printList();
-    linkedListDouble<int>::Iterator B = A.begin();
-    ++B;
-    ++B;
-    --B;
-    std::cout<<*B;
+    A.reverce();
+    A.printList();
+    linkedListSingle<int>::Iterator it = A.end();
+
+    std::cout<<*it;
+    
     //std::cout<<A.empty()<<A.getSize();
     
 }

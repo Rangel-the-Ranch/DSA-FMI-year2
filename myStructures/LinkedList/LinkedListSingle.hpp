@@ -32,7 +32,7 @@ class linkedListSingle{
         const T& peekFront()const;
         bool empty()const;
         size_t getSize()const;
-
+        void reverce();
         void printList()const;
 
         class Iterator{
@@ -65,7 +65,29 @@ class linkedListSingle{
         Iterator begin(){
             return Iterator(m_begin);
         };
+        Iterator end(){
+            return Iterator(m_end);
+        };
 };
+template <typename T>
+void linkedListSingle<T>::reverce(){
+    if(empty() || m_begin == m_end){
+        return;
+    }
+    listNode* newEnd = m_begin;
+    listNode* helper = nullptr;
+    listNode* it = m_begin;
+    while(  it != nullptr ){
+        listNode* temp = it->next;
+        it->next = helper;
+        helper = it;
+        it = temp;
+    }
+    m_begin = helper;
+
+    m_end = newEnd;
+}
+
 template <typename T>
 bool linkedListSingle<T>::empty()const{
     return !m_end;
