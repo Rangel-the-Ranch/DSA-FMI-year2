@@ -1,9 +1,10 @@
 #pragma once
-
 template <typename T>
 class linkedListDouble{
     private:
         #include"NodeElementDouble.hpp"
+
+
     public:
     
         linkedListDouble();
