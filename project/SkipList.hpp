@@ -47,6 +47,7 @@ class SkipList{
                 void operator++();
                 void operator+=(const unsigned int moves);
                 void skip();
+                bool isNull()const;
 
                 void addSkip(const Iterator& newSkip);
 
@@ -73,6 +74,10 @@ class SkipList{
 
 };
 
+template<typename T>
+bool SkipList<T>::Iterator::isNull()const{
+    return !m_Ptr;
+}
 
 template<typename T>
 SkipList<T>::SkipList(const SkipListNode* newNode){

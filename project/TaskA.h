@@ -1,18 +1,25 @@
 #pragma once
 
 #include<string>
+#include<queue>
 #include"SkipList.hpp"
 
 class TaskA{
     public:
         TaskA();
     private:
-        static const size_t MAX_INPUT_SIZE;
         SkipList<std::string> m_List;
-        size_t m_StationsCount;
+        std::queue<std::string> m_ReqStations;
+        size_t m_StationsCount = 0;
+        size_t m_SkipCout = 0;
+        size_t m_reqCityCount = 0;
+
 
         void getStationsCount();
         void getStations();
-
+        void getSkipsCount();
+        void getSkips();
+        void getReqCityCount();
+        void getReqStations();
 };
 
