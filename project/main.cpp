@@ -1,15 +1,8 @@
-//#include<iostream>
-
 #include"SkipList.hpp"
 
+#include"taskA.h"
+#include"taskA.cpp"
 
 int main(){
-    SkipList<int> list;
-    list.pushBack(5);
-    list.pushBack(4);
-    list.pushBack(3);
-    list.pushBack(2);
-    list.popBack();
-    list.popFront();
-    list.print();
+    TaskA one;
 }

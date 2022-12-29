@@ -20,6 +20,10 @@ class SkipList{
         };
 
     public:
+        SkipList();
+        SkipList(const SkipListNode* newNode);
+        ~SkipList();
+
         void pushBack(const T& newData);
         void pushFront(const T& newData);
         void popBack();
@@ -38,14 +42,24 @@ class SkipList{
                 Iterator(SkipListNode* newPtr);
 
                 bool operator==(const Iterator& other)const;
+                bool operator!=(const Iterator& other)const;
                 T& operator*();
                 void operator++();
+                void operator+=(const unsigned int moves);
                 void skip();
+
+                void addSkip(const Iterator& newSkip);
 
                 friend class SkipListNode;
             private:
                 SkipListNode* m_Ptr = nullptr;
         };
+
+        SkipListNode* begin(){
+            return m_Begin;
+        }
+        
+
 
         
     private:
@@ -54,18 +68,61 @@ class SkipList{
         unsigned int m_Size = 0;
 
         void defaultValues();
+        void free();
 
 
 };
 
 
+template<typename T>
+SkipList<T>::SkipList(const SkipListNode* newNode){
+    pushBack(newNode);
+}
+
+template<typename T>
+SkipList<T>::SkipList(){
+    defaultValues();
+}
+
+template<typename T>
+SkipList<T>::~SkipList(){
+    free();
+}
+
+template<typename T>
+void SkipList<T>::free(){
+    if(m_Begin){
+        popBack();
+    }
+}
+
+template<typename T>
+void SkipList<T>::Iterator::addSkip(const Iterator& newSkip){
+    if(m_Ptr == nullptr){
+        throw "Iterator not existing";
+    }else{
+        m_Ptr->m_Skip = newSkip.m_Ptr;
+    }
+}
 
 template<typename T>
 void SkipList<T>::Iterator::skip(){
     if(m_Ptr == nullptr){
         throw "Iterator not existing";
-    }else if(! (m_Ptr ->m_Skip) ){
+    }else if( m_Ptr ->m_Skip ){
         m_Ptr = m_Ptr -> m_Skip;
+    }
+}
+
+template<typename T>
+void SkipList<T>::Iterator::operator+=(const unsigned int moves){
+    if(m_Ptr == nullptr){
+        throw "Iterator not existing";
+    }else if(moves <= 0){
+        return;
+    }else if( m_Ptr ->m_Next ){
+        m_Ptr = m_Ptr -> m_Next;
+        operator+=(moves-1);
     }
 }
 
@@ -73,7 +130,7 @@ template<typename T>
 void SkipList<T>::Iterator::operator++(){
     if(m_Ptr == nullptr){
         throw "Iterator not existing";
-    }else if(! (m_Ptr ->m_Next) ){
+    }else if( m_Ptr ->m_Next ){
         m_Ptr = m_Ptr -> m_Next;
     }
 }
@@ -87,6 +144,10 @@ T& SkipList<T>::Iterator::operator*(){
 template<typename T>
 bool SkipList<T>::Iterator::operator==(const Iterator& other)const{
     return m_Ptr == other.m_Ptr;
+}
+template<typename T>
+bool SkipList<T>::Iterator::operator!=(const Iterator& other)const{
+    return !(m_Ptr == other.m_Ptr);
 }
 
 template<typename T>
