@@ -105,8 +105,7 @@ void linkedListSingle<T>::pushBack(const T& newData){
     if(m_end == nullptr){
         m_end = newElem;
         m_begin = newElem;
-    }else{
-        
+    }else{    
         m_end->next = newElem;
         m_end = m_end-> next;
     }
