@@ -1,8 +1,8 @@
 #pragma once
 
 #include<string>
-#include<stack>
 #include<vector>
+#include<iostream>
 
 class Box{
     public:
@@ -13,17 +13,25 @@ class Box{
         void setName(const std::string& newName);
 
         void addSouvenier(const std::string& newSouvenier);
-        std::string getSouvenier()const;
+        std::string getSouvenier(const unsigned int index)const;
+        std::vector<std::string> getAllSouveniers()const;
         void removeSouvenier();
         unsigned int getSouvenierCount()const;
 
-        void addBox(Box*& newBox);
-        Box* getBox(unsigned int index);
-        void removeBox();
+        void addBox(Box* newBox);
+        Box& getBox(unsigned int index)const;
+        unsigned int getInsideBoxCount()const;
+        void removeBox(const Box& toDelete);
 
+        bool shoudRemove()const;
+
+        void print()const;
+
+        Box& operator+=(Box& other);
+        bool operator==(const Box& other);
 
     private:
-        std::stack<std::string> m_Souvenirs;
+        std::vector<std::string> m_Souvenirs;
         std::vector<Box*> m_InsideBoxes;
         std::string m_Name;
 

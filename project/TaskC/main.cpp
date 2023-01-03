@@ -1,9 +1,11 @@
 #include"Box/Box.h"
-
-
 #include"Box/Box.cpp"
 
-int main(){
+#include"BoxList/BoxList.h"
+#include"BoxList/BoxList.cpp"
 
+int main(){
+    BoxList TaskC("example.txt");
+    TaskC.printList();
     
 }
