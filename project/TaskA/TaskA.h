@@ -14,7 +14,7 @@ class TaskA{
         void getInput();
         void printPath()const;
 
-
+        void hardCodeInput();
     private:
         SkipList<std::string> m_List;
         std::queue<std::string> m_ReqStations;

@@ -2,9 +2,23 @@
 
 TaskA::TaskA(){
     
-    getInput();
+    //getInput();
+    hardCodeInput();
     getPath();
     m_List.print();
+}
+void TaskA::hardCodeInput(){
+    m_SkipCout = 5;
+    m_List.pushBack("sofia");
+    m_List.pushBack("plovdiv");
+    m_List.pushBack("staraZagora");
+    m_List.pushBack("novaZagora");
+    m_List.pushBack("burgas");
+    m_SkipCout = 2;
+    //
+    m_reqCityCount = 2;
+    m_ReqStations.push("staraZagora");
+    m_ReqStations.push("burgas");
 }
 
 void TaskA::printPath()const{
