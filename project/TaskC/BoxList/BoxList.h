@@ -26,6 +26,7 @@ class BoxList{
         void moveLineDown(std::ifstream& iFile)const;
         void skipToInsides(std::ifstream& iFile)const;
         void skipWord(std::ifstream& iFile)const;
+        
         Box* getPtrByName(const std::string& name);
 
         void addBox(Box& newBox);
