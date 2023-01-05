@@ -5,7 +5,6 @@
 #include"BoxList/BoxList.cpp"
 
 int main(){
-    BoxList TaskC("example.txt");
+    BoxList TaskC("txts/example.txt");
     TaskC.printList();
-    
 }

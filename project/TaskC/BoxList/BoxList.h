@@ -10,27 +10,23 @@
 class BoxList{
     public:
         BoxList();
-        BoxList(const char* file);
+        BoxList(const char* fileName);
 
 
         void clear();
-        void inputFile(const char* file);
+        void inputFile(const char* fileName);
         void printList()const;
 
     private:
         static const bool BORDER = true;
-
         std::list<Box> m_List;
-
-        Box* getPtrByName(const std::string& name);
 
         std::string getWord(std::ifstream& iFile)const;
         unsigned int getNumber(std::ifstream& iFile)const;
-
         void moveLineDown(std::ifstream& iFile)const;
         void skipToInsides(std::ifstream& iFile)const;
         void skipWord(std::ifstream& iFile)const;
-
+        Box* getPtrByName(const std::string& name);
 
         void addBox(Box& newBox);
         void addBox(const std::string& newBoxName);

@@ -3,8 +3,8 @@
 BoxList::BoxList(){
 
 }
-BoxList::BoxList(const char* file){
-    inputFile(file);
+BoxList::BoxList(const char* fileName){
+    inputFile(fileName);
     clear();
 }
 
@@ -111,19 +111,16 @@ void BoxList::moveLineDown(std::ifstream& iFile)const{
     }
 }
 
-void BoxList::inputFile(const char* file){
-    std::ifstream iFile(file);
+void BoxList::inputFile(const char* fileName){
+    std::ifstream iFile(fileName);
     if( !iFile.is_open()){
         return;
     }
     
     addAllBoxes(iFile);
+    iFile.seekg(std::ios::beg);
+    addInsides(iFile);
     iFile.close();
-
-    std::ifstream file2(file);
-    ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-    addInsides(file2);
-    file2.close();
 }
 
 void BoxList::addAllBoxes(std::ifstream& iFile){
@@ -174,6 +171,7 @@ void BoxList::skipToInsides(std::ifstream& iFile)const{
 }
 
 void BoxList::addInsides(std::ifstream& iFile){
+    iFile.seekg(std::ios::beg);
     skipWord(iFile);
     for (auto &i: m_List) {
         skipToInsides(iFile);
