@@ -48,6 +48,8 @@ class SkipList{
                 void operator+=(const unsigned int moves);
                 void skip();
                 bool isNull()const;
+                bool isAtEnd()const;
+                bool haveSkip()const;
 
                 void addSkip(const Iterator& newSkip);
 
@@ -75,8 +77,17 @@ class SkipList{
 };
 
 template<typename T>
+bool SkipList<T>::Iterator::haveSkip()const{
+    return m_Ptr->m_Skip;
+}
+
+template<typename T>
 bool SkipList<T>::Iterator::isNull()const{
     return !m_Ptr;
+}
+template<typename T>
+bool SkipList<T>::Iterator::isAtEnd()const{
+    return !m_Ptr->m_Next;
 }
 
 template<typename T>
@@ -176,6 +187,18 @@ void SkipList<T>::print()const{
             iter = iter->m_Next;
         }
         std::cout<<iter->m_Data;
+    }
+    std::cout<<std::endl;
+    SkipListNode* itr = m_Begin;
+    while(itr != nullptr){
+        if(itr->m_Skip != nullptr){
+            std::cout<<itr->m_Data;
+            std::cout<<" -> ";
+            std::cout<<itr->m_Skip->m_Data;
+            std::cout<<std::endl;
+            
+        }
+        itr = itr->m_Next;
     }
     std::cout<<std::endl;
 }

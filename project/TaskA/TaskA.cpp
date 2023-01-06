@@ -1,24 +1,38 @@
 #include"TaskA.h"
 
-TaskA::TaskA(){
-    
-    //getInput();
-    hardCodeInput();
-    getPath();
+void TaskA::printList()const{
     m_List.print();
 }
+
 void TaskA::hardCodeInput(){
+    m_SkipCout = 9;
+    m_List.pushBack("Sofia");
+    m_List.pushBack("Pazardjik");
+    m_List.pushBack("Plovdiv");
+    m_List.pushBack("Dimitrovgrad");
+    m_List.pushBack("StaraZagora");
+    m_List.pushBack("NovaZagora");
+    m_List.pushBack("Yambol");
+    m_List.pushBack("Karnobat");
+    m_List.pushBack("Burgas");
     m_SkipCout = 5;
-    m_List.pushBack("sofia");
-    m_List.pushBack("plovdiv");
-    m_List.pushBack("staraZagora");
-    m_List.pushBack("novaZagora");
-    m_List.pushBack("burgas");
-    m_SkipCout = 2;
-    //
-    m_reqCityCount = 2;
-    m_ReqStations.push("staraZagora");
-    m_ReqStations.push("burgas");
+    addSkip("Sofia","Plovdiv");
+    addSkip("Plovdiv","NovaZagora");
+    addSkip("Dimitrovgrad","NovaZagora");
+    addSkip("StaraZagora","Yambol");
+    addSkip("NovaZagora","Burgas");
+    m_reqCityCount = 3;
+    m_ReqStations.push("Plovdiv");
+    m_ReqStations.push("StaraZagora");
+    m_ReqStations.push("Yambol");
+}
+
+void TaskA::addSkip(const std::string& from, const std::string& to){
+    SkipList<std::string>::Iterator A(m_List.begin());
+    SkipList<std::string>::Iterator B(m_List.begin());
+    getStationFromName(A,from);
+    getStationFromName(B,to);
+    A.addSkip(B);
 }
 
 void TaskA::printPath()const{
@@ -42,22 +56,52 @@ void TaskA::getInput(){
 
 void TaskA::getPath(){
     std::vector<std::string> res;
-    SkipList<std::string>::Iterator from=m_List.begin();
-    SkipList<std::string>::Iterator to = m_List.begin();
-    getStationFromName(to,m_ReqStations.front());
+    SkipList<std::string>::Iterator from(m_List.begin());
+    SkipList<std::string>::Iterator to(m_List.begin());
+    std::string last = m_ReqStations.front();
+    getStationFromName(to,last);
     m_ReqStations.pop();
-    for(size_t i=1; i<m_reqCityCount; i++){
+    for(size_t i=1; i<=m_reqCityCount; i++){
         std::vector<std::string> temp = getPathBetweenAandB(from,to,{});
-        from = to;
-        getStationFromName(to,m_ReqStations.front());
-        m_ReqStations.pop();
+        reverseVector(temp);
         while(temp.size()){
             res.push_back(temp[temp.size()-1]);
             temp.pop_back();
         }
+        if(i != m_reqCityCount){
+            from = to;
+            last = m_ReqStations.front();
+            getStationFromName(to,last);
+            m_ReqStations.pop();
+        }else{
+            if(last != m_List.peekBack() ){
+                from = to;
+                getStationFromName( to,m_List.peekBack() );
+                std::vector<std::string> temp = getPathBetweenAandB(from,to,{});
+                reverseVector(temp);
+                while(temp.size()){
+                    res.push_back(temp[temp.size()-1]);
+                    temp.pop_back();
+                }
+                res.push_back(m_List.peekBack());
+
+            }else{
+                res.push_back(last);
+            }
+        }
     }
     m_Path = res;
 }
+
+void TaskA::reverseVector(std::vector<std::string>& vector)const{
+    const size_t vectorSize = vector.size();
+    const size_t vectorSize2 = vectorSize/2;
+
+    for (size_t i = 0; i < vectorSize2; i++) {
+        std::swap(vector[i], vector[vectorSize - i - 1]);
+    }
+}
+
 void TaskA::getStationFromName(SkipList<std::string>::Iterator& Itr, std::string name)const{
     if(Itr.isNull()){
         return;
@@ -73,11 +117,21 @@ std::vector<std::string> TaskA::getPathBetweenAandB(SkipList<std::string>::Itera
     if(A == B){
         return path;
     }
-    if(A.isNull()){
+    if(A.isAtEnd()){
         return {};
     }
     path.push_back(*A);
-
+    
+    if( ! A.haveSkip() ){
+        SkipList<std::string>::Iterator itrN = A;
+        ++itrN;
+        std::vector<std::string> pathNext = getPathBetweenAandB(itrN,B,path);
+        if( pathNext.size() == 0 ){
+            return {};
+        }else{
+            return pathNext;
+        }
+    }
     SkipList<std::string>::Iterator itrN = A;
     SkipList<std::string>::Iterator itrS = A;
     ++itrN;
@@ -91,7 +145,7 @@ std::vector<std::string> TaskA::getPathBetweenAandB(SkipList<std::string>::Itera
     }else if(pathSkip.size() == 0){
         return pathNext;
     }else{
-        if(pathNext.size() > pathSkip.size()){
+        if(pathNext.size() < pathSkip.size()){
             return pathNext;
         }else{
             return pathSkip;
