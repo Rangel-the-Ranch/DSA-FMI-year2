@@ -1,7 +1,7 @@
 #include"SkipList.hpp"
 
 #include"taskA.h"
-#include"taskA.cpp"
+//#include"taskA.cpp"
 
 int main(){
     std::cout<<std::endl;
